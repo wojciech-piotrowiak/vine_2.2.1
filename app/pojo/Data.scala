@@ -1,0 +1,5 @@
+package pojo
+
+trait Data {
+
+}

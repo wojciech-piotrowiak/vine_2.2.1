@@ -1,0 +1,35 @@
+@(vines: List[pojo.VineData], vineForm: Form[pojo.VineData])
+
+@import helper._
+
+@main("Vine list") {
+    
+    <h1>@vines.size task(s)</h1>
+    
+    <ul>
+        @vines.map { vine =>
+            <li>
+                @vine.client
+                @vine.label
+                @vine.description
+                
+                @form(routes.Application.deleteVine(vine.id)) {
+                    <input type="submit" value="Delete">
+                }
+            </li>
+        }
+    </ul>
+    
+    <h2>Add a new vine</h2>
+    
+    @form(routes.Application.newVine) {
+        
+        @inputText(vineForm("label")) 
+        @inputText(vineForm("description")) 
+        @inputText(vineForm("client")) 
+        
+        <input type="submit" value="Create">
+        
+    }
+    
+}
