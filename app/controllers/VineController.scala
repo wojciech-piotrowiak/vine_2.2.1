@@ -45,7 +45,7 @@ def vines = Action {
 //  )
 }
   def deleteVine(id: Long) = Action {
-  DaoVine.deleteVine(id)
+//  DaoVine.deleteVine(id)
   Redirect(routes.Application.vines)
 }
  

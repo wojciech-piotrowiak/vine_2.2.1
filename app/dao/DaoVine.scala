@@ -13,11 +13,14 @@ import models.Vine
 
 
 
-case class DaoVine()
 
-object DaoVine {
+object DaoVine  extends BaseDao[Vine]{
   
-  val vine = {
+	override def getEntityName :String={
+  	 return "vine";
+   }
+	
+  def getRowParser :RowParser[Vine] = {
   get[Long]("id") ~ 
   get[Long]("gid") ~ 
   get[String]("label")~
@@ -28,10 +31,6 @@ object DaoVine {
   get[Boolean]("visible") map{
   case id~gid~label~description~client~created~recipe~visible => Vine(id,gid,label,description,client,created,recipe,visible)
   }
-}
-  
-  def getVines() : List[Vine] = DB.withConnection { implicit c =>
-  SQL("select * from vine").as(vine *)
 }
   
   def createVine(label: String,description:String,client:Option[Long],created:Date) :BaseEntity= {
@@ -78,13 +77,13 @@ object DaoVine {
   def getVinesForClientID(clientID: Option[Long]) : List[Vine] = DB.withConnection { implicit c =>
       if(!clientID.isDefined) throw new IllegalArgumentException
   SQL("select * from vine where client={client}").on(
-      'client -> clientID).as(vine *)
+      'client -> clientID).as(getRowParser *)
   }
    
   def getVinesForRecipeID(recipeID: Option[Long]) : List[Vine] = DB.withConnection { implicit c =>
       if(!recipeID.isDefined) throw new IllegalArgumentException
   SQL("select * from vine where recipe={recipe}").on(
-      'recipe -> recipeID).as(vine *)
+      'recipe -> recipeID).as(getRowParser *)
   }
    
   def activateVine(id: Option[Long]) {
@@ -105,12 +104,6 @@ object DaoVine {
   }
 }
   
-    def getVineForID(id: Long):Vine= {
-  DB.withConnection { implicit c =>
-   return SQL("select * from vine where id={id}").on(
-    'id -> id).single(vine)
-   }}
-  
-       
+ 
 }
 

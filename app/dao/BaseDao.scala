@@ -5,7 +5,7 @@ import anorm._
 import play.api.Play.current
 import scala.language.postfixOps
 
-trait BaseDao[T] {
+trait BaseDao[+T] {
 	def getAllItems(): List[T]= DB.withConnection { implicit c =>
 		SQL("select * from "+getEntityName).as(getRowParser *)
 }

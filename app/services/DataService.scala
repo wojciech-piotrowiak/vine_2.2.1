@@ -21,6 +21,7 @@ import dao.DaoUtils
 import dao.BaseEntity
 import anorm.RowParser
 import dao.BaseDao
+import dao.DaoRecipe
 
 
 
@@ -38,7 +39,7 @@ object DataService {
  
  def getClientForID(id:Long) :Client= {
    try{
-   return DaoClient.getClientForID(id)
+   return getModelForID(DaoClient, id).asInstanceOf[Client]
    }
    catch
    {
@@ -68,7 +69,7 @@ object DataService {
   
    def getVineForID(id:Long) :Vine= {
     try{
-    	return DaoVine.getVineForID(id)
+    	return getModelForID(DaoVine, id).asInstanceOf[Vine]
     }
    catch
    {
@@ -87,7 +88,7 @@ object DataService {
    
     def getVineHistoryForID(id:Long) :VineHistory= {
     try{
-    return DaoVineHistory.getVineHistoryForID(id)
+    return  getModelForID(DaoVineHistory, id).asInstanceOf[VineHistory]
     }
    catch
    {
@@ -106,7 +107,7 @@ object DataService {
  
  def getCommentForID(id:Long) :VineComment= {
     try{
-    return DaoComment.getItemForID(id)
+    return	getModelForID(DaoComment, id).asInstanceOf[VineComment]
     }
    catch
    {
@@ -125,7 +126,7 @@ object DataService {
    
    def getRecipeForID(id:Long) :Recipe= {
 		 try{
-			 return  DaoRecipe.getItemForID(id)
+			 return  getModelForID(DaoRecipe, id).asInstanceOf[Recipe]
 		 }
 		 catch
 		 {

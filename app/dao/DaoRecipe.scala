@@ -80,5 +80,14 @@ object DaoRecipe extends BaseDao[Recipe] {
     'id -> id).single(getRowParser)
    }}
     
+          
+           def deleteRecipe(id: Option[Long]) {
+  if(!id.isDefined) throw new IllegalArgumentException
+  DB.withConnection { implicit c =>
+    SQL("delete from recipe where id = {id}").on(
+      'id -> id
+    ).executeUpdate()
+  }
+}
 }
 

@@ -13,13 +13,15 @@ import models.VineHistory
 
 
 
-case class DaoVineHistory()
 
-object DaoVineHistory {
+
+object DaoVineHistory extends BaseDao[VineHistory] {
   
-
+override def getEntityName :String={
+  	 return "vinehistory";
+   }
     
-  val vine_history = {
+  def getRowParser :RowParser[VineHistory] = {
   get[Long]("id") ~ 
   get[Long]("gid") ~ 
   get[Long]("vine") ~
@@ -32,7 +34,7 @@ object DaoVineHistory {
 }
   
 def getVineHistory(vine: Long): List[VineHistory] = DB.withConnection { implicit c =>
-  SQL("select * from vinehistory where vine={vine} order by created ASC").on('vine->vine).as(vine_history *)
+  SQL("select * from vinehistory where vine={vine} order by created ASC").on('vine->vine).as(getRowParser *)
 }
     
 def createVineHistory(label: String,description:String,vine:Long,created:Date) :BaseEntity= {
@@ -77,12 +79,5 @@ def deactivateVineHistory(id: Option[Long]) {
   }
 }
 
-   def getVineHistoryForID(id: Long):VineHistory= {
-  DB.withConnection { implicit c =>
-   return SQL("select * from vinehistory where id={id}").on(
-    'id -> id).single(vine_history)
-   }}
-
- 
 }
 

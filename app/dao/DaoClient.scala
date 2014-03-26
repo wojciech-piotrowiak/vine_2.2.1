@@ -13,11 +13,15 @@ import models.Client
 
 
 
-case class DaoClient()
 
-object DaoClient {
 
-   val client = {
+object DaoClient extends BaseDao[Client] {
+
+   override def getEntityName :String={
+  	 return "client";
+   }
+   
+   def getRowParser :RowParser[Client] = {
   get[Long]("id") ~ 
   get[Long]("gid") ~ 
   get[String]("login") ~
@@ -28,10 +32,7 @@ object DaoClient {
   case id~gid~login~firstName~lastName~registered~active => Client(id,gid, login,firstName,lastName,registered,active)
   }
 }
-    
-  def getClients(): List[Client] = DB.withConnection { implicit c =>
-  SQL("select * from client").as(client *)
-}
+	
   
 
   def createClient(login: String, firstName: String, lastName: String,registered:Date):BaseEntity= {
@@ -83,15 +84,6 @@ object DaoClient {
       'active->true,'login -> login
     ).executeUpdate()
   }
-    }
-  
-   def getClientForID(id: Long):Client= {
-  DB.withConnection { implicit c =>
-   return SQL("select * from client where id={id}").on(
-    'id -> id).single(client)
-   }}
-  
-
-    
+    }    
 }
 

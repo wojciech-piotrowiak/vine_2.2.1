@@ -31,14 +31,14 @@ class DaoTest extends BaseTest   {
        DaoTesting.cleanAll()
        DaoTestUtils.getSampleClient();
        DaoTesting.cleanAll()
-       DaoClient.getClients() must beEmpty
+       DaoClient.getAllItems must beEmpty
     }
      
     "vine empty" in   {
       DaoTesting.cleanAll()
       DaoTestUtils.getSampleVine();
       DaoTesting.cleanAll()
-      DaoVine.getVines() must beEmpty
+      DaoVine.getAllItems must beEmpty
     }
     "vine history empty" in   {
       DaoTesting.cleanAll()

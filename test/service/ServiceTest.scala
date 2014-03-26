@@ -43,9 +43,9 @@ import anorm._
     "removeClient" in   {
 	    DaoTesting.cleanAll
 	    val c:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
-	     DaoClient.getClients().size==1
+	    DaoClient.getAllItems.size==1
 	    DataService.deleteModel(c);
-	    DaoClient.getClients().size==0
+	    DaoClient.getAllItems.size==0
     }
     
     "getClientForID -existing" in   {
@@ -91,9 +91,9 @@ import anorm._
 	  DaoTesting.cleanAll
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val vine:Vine=DataService.createVine("label","description",client,None);
-	  DaoVine.getVines.size==1
+	  DaoVine.getAllItems.size==1
 	  DataService.deleteModel(vine);
-	  DaoVine.getVines.size==0
+	  DaoVine.getAllItems.size==0
     }
    
    "getVineForID" in   {

@@ -32,13 +32,13 @@ class DaoClientTest extends BaseTest  {
 "getClient"  should {
    "be empty after clean " in   {
 	  DaoTesting.cleanAll()
-      DaoClient.getClients() must beEmpty
+      DaoClient.getAllItems must beEmpty
   }
   "return sth after insert" in   {
      DaoTesting.cleanAll()
      DaoClient.createClient("1", "firstName", "lastName",new Date())
      DaoClient.createClient("2", "firstName", "lastName",new Date())
-     DaoClient.getClients() must have size(2)
+     DaoClient.getAllItems must have size(2)
   }
   
 }
@@ -49,7 +49,7 @@ class DaoClientTest extends BaseTest  {
      DaoClient.createClient("1", "firstName", "lastName",new Date())
      DaoClient.createClient("2", "firstName", "lastName",new Date())
      DaoClient.createClient("3", "firstName", "lastName",new Date())
-     DaoClient.getClients() must have size(3)
+     DaoClient.getAllItems must have size(3)
   }
    "cannot create repeated user" in  {
      DaoTesting.cleanAll()
@@ -61,7 +61,7 @@ class DaoClientTest extends BaseTest  {
     "save created client" in  {
      DaoTesting.cleanAll()
      val id:Long=  DaoClient.createClient("1", "firstName", "lastName",new Date()).id
-     val client:Client=DaoClient.getClients().head
+     val client:Client=DaoClient.getAllItems.head
      client.firstName.contentEquals("firstName")
      client.lastName.contentEquals("lastName")
      client.login==4
@@ -73,12 +73,12 @@ class DaoClientTest extends BaseTest  {
     "delete client" in {
      DaoTesting.cleanAll()
      DaoClient.createClient("4", "firstName", "lastName",new Date())
-     DaoClient.getClients() must have size(1)           
+    DaoClient.getAllItems must have size(1)           
      DaoClient.deleteClient("4");
-     DaoClient.getClients() must have size(0)           
+    DaoClient.getAllItems must have size(0)           
   }
      "delete not existing client" in   {
-     DaoClient.getClients() must beEmpty
+     DaoClient.getAllItems must beEmpty
      DaoClient.deleteClient("4")
      true
   }
@@ -88,9 +88,9 @@ class DaoClientTest extends BaseTest  {
     "activate client" in {
      DaoTesting.cleanAll()
      DaoClient.createClient("4", "firstName", "lastName",new Date())
-     val client:Client=DaoClient.getClients().head     
+     val client:Client=DaoClient.getAllItems.head     
      DaoClient.activateClient("4");
-     val activatedClient=DaoClient.getClients().head
+     val activatedClient=DaoClient.getAllItems.head
      client.active must beFalse //new born users are NOT active
      activatedClient.active must  beTrue
 }
@@ -100,11 +100,11 @@ class DaoClientTest extends BaseTest  {
     "deactivate client" in {
       DaoTesting.cleanAll()
       DaoClient.createClient("4", "firstName", "lastName",new Date())
-     val client:Client=DaoClient.getClients().head     
+     val client:Client=DaoClient.getAllItems.head     
      DaoClient.activateClient("4");
-     val activatedClient=DaoClient.getClients().head
+     val activatedClient=DaoClient.getAllItems.head
      DaoClient.deactivateClient("4");
-     val deactivatedClient=DaoClient.getClients().head
+     val deactivatedClient=DaoClient.getAllItems.head
      client.active must beFalse //new born users are NOT active
      activatedClient.active must  beTrue
      deactivatedClient.active must beFalse 

@@ -33,12 +33,12 @@ class DaoRecipeTest extends BaseTest {
 "getRecipies" should {
   "be empty after clean " in  {
 	  DaoTesting.cleanAll()
-      DaoRecipe.getRecipies() must beEmpty
+      DaoRecipe.getAllItems must beEmpty
   }
   "return sth after insert" in   {
 	  DaoTesting.cleanAll()
       val recipeID=DaoTestUtils.getSampleRecipe().id
-      DaoRecipe.getRecipies() must have size(1)
+      DaoRecipe.getAllItems must have size(1)
   }
   "getRecipiesForClientID " in   {
 	  DaoTesting.cleanAll()
@@ -48,7 +48,7 @@ class DaoRecipeTest extends BaseTest {
 	  DaoRecipe.createRecipe("recipeLabel", "recipeDescription", clientID, new Date())
 	  val clientID2:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
 	  DaoRecipe.createRecipe("recipeLabel", "recipeDescription", clientID2, new Date())
-	  DaoRecipe.getRecipies() must have size(4)
+	 DaoRecipe.getAllItems must have size(4)
 	  DaoRecipe.getRecipiesForClientID(clientID) must have size(3)
 	  DaoRecipe.getRecipiesForClientID(clientID2) must have size(1)
   }
@@ -64,14 +64,14 @@ class DaoRecipeTest extends BaseTest {
      DaoTesting.cleanAll()
      DaoTestUtils.getSampleRecipe()
      DaoTestUtils.getSampleRecipe()
-     DaoRecipe.getRecipies() must have size(2)
+     DaoRecipe.getAllItems must have size(2)
   }
    
     "save created recipe" in   {
      DaoTesting.cleanAll()
       val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
      DaoRecipe.createRecipe("label", "description", clientID, new Date())
-     val recipe:Recipe=DaoRecipe.getRecipies().head
+     val recipe:Recipe=DaoRecipe.getAllItems.head
      recipe.label.contentEquals("label")
      recipe.description.contentEquals("description")
      clientID.get.equals(recipe.creatorID)
@@ -83,9 +83,9 @@ class DaoRecipeTest extends BaseTest {
    "delete empty recipe" in {
      DaoTesting.cleanAll()
      val recipeID=DaoTestUtils.getSampleRecipe().id
-     DaoRecipe.getRecipies() must have size(1) 
+    DaoRecipe.getAllItems must have size(1) 
      DaoRecipe.deleteRecipe(Some(recipeID))
-     DaoRecipe.getRecipies() must have size(0) 
+     DaoRecipe.getAllItems must have size(0) 
   }
    
     "delete non empty recipe" in  {
@@ -94,9 +94,9 @@ class DaoRecipeTest extends BaseTest {
      val clientID=DaoTestUtils.getSampleClient().id
      DaoVine.createVineWithRecipe("label", "description",Some(clientID),Some(recipeID), new Date())
      DaoVine.createVineWithRecipe("label2","description", Some(clientID),Some(recipeID), new Date())
-     DaoRecipe.getRecipies() must have size(1) 
+     DaoRecipe.getAllItems must have size(1) 
      DaoRecipe.deleteRecipe(Some(recipeID))
-     DaoRecipe.getRecipies() must have size(0) 
+     DaoRecipe.getAllItems must have size(0) 
   }
      "delete not existing recipe" in   {
      DaoRecipe.deleteRecipe(Some(154))
@@ -112,11 +112,11 @@ class DaoRecipeTest extends BaseTest {
    "activateRecipe" in {
      DaoTesting.cleanAll()
      val recipeID=DaoTestUtils.getSampleRecipe().id
-     DaoRecipe.getRecipies().head.visible must beTrue
+     DaoRecipe.getAllItems.head.visible must beTrue
      DaoRecipe.deactivateRecipe(Some(recipeID))
-     DaoRecipe.getRecipies().head.visible must beFalse
+     DaoRecipe.getAllItems.head.visible must beFalse
      DaoRecipe.activateRecipe(Some(recipeID))
-     DaoRecipe.getRecipies().head.visible must beTrue
+     DaoRecipe.getAllItems.head.visible must beTrue
   }
    "throw errow when activating None recipe" in  {
      DaoRecipe.activateRecipe(None) must
@@ -128,9 +128,9 @@ class DaoRecipeTest extends BaseTest {
    "deactivateRecipe" in {
      DaoTesting.cleanAll()
      val recipeID=DaoTestUtils.getSampleRecipe().id
-     DaoRecipe.getRecipies().head.visible must beTrue
+     DaoRecipe.getAllItems.head.visible must beTrue
      DaoRecipe.deactivateRecipe(Some(recipeID))
-     DaoRecipe.getRecipies().head.visible must beFalse
+     DaoRecipe.getAllItems.head.visible must beFalse
   }
    
    "throw errow when deactivating None recipe" in  {

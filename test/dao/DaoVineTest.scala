@@ -32,14 +32,14 @@ class DaoVineTest extends BaseTest  {
 "getVines" should {
   "be empty after clean " in  {
 	  DaoTesting.cleanAll()
-      DaoVine.getVines() must beEmpty
+      DaoVine.getAllItems must beEmpty
   }
   "return plain vines" in   {
 	  DaoTesting.cleanAll()
 	  val clientID:Option[Long]=Some(DaoTestUtils.getSampleClient().id)
 	  DaoVine.createVine("test2","description",clientID,new Date())
 	  DaoVine.createVine("test3","description",clientID,new Date())
-      DaoVine.getVines() must have size(2)
+      DaoVine.getAllItems must have size(2)
   }
   
   "return recipe auto vines" in  {
@@ -49,7 +49,7 @@ class DaoVineTest extends BaseTest  {
 	  val minVal:Option[Long]=Some(recipeID.id)
 	  DaoVine.createVineWithRecipe("test2","description",clientID,minVal,new Date())
 	  DaoVine.createVineWithRecipe("test3","description",clientID,minVal,new Date())
-      DaoVine.getVines() must have size(2)
+      DaoVine.getAllItems must have size(2)
   }
   
    "return recipe non-auto vines" in  {
@@ -58,7 +58,7 @@ class DaoVineTest extends BaseTest  {
 	  val recipeID=Some(DaoTestUtils.getSampleRecipe().id)
 	  DaoVine.createVineWithRecipe("test2","description",clientID,recipeID,new Date())
 	  DaoVine.createVineWithRecipe("test3","description",clientID,recipeID,new Date())
-      DaoVine.getVines() must have size(2)
+     DaoVine.getAllItems must have size(2)
   }
   
   "return VinesForRecipeID" in  {
@@ -69,7 +69,7 @@ class DaoVineTest extends BaseTest  {
 	  DaoVine.createVineWithRecipe("test3","description",clientID,recipeID,new Date())
 	  DaoVine.createVine("test3","description",clientID,new Date())
       DaoVine.getVinesForRecipeID(recipeID) must have size(2)
-	  DaoVine.getVines() must have size(3)
+	  DaoVine.getAllItems must have size(3)
   }
   
   "throw error when none VinesForRecipeID" in  {
@@ -83,7 +83,7 @@ class DaoVineTest extends BaseTest  {
      val clientID:Option[Long]=Some(DaoTestUtils.getSampleClient().id)
      DaoVine.createVine("test1","description",clientID,new Date())
      DaoVine.createVine("test2","description",clientID,new Date())
-     DaoVine.getVines() must have size(2)
+     DaoVine.getAllItems must have size(2)
   }
    
     "create vine with recipe" in   {
@@ -92,14 +92,14 @@ class DaoVineTest extends BaseTest  {
      val recipeID:Option[Long]=Some(DaoRecipe.createRecipe("label", "description", clientID, new Date()).id)
      DaoVine.createVineWithRecipe("test1","description",clientID,recipeID,new Date())
      DaoVine.createVineWithRecipe("test2","description",clientID,recipeID,new Date())
-     DaoVine.getVines() must have size(2)
+     DaoVine.getAllItems must have size(2)
   }
    
     "save created vine without recipe" in  {
      DaoTesting.cleanAll()
      val clientID:Option[Long]=Some(DaoTestUtils.getSampleClient().id)
      val firstId:Long=   DaoVine.createVine("test1","description",clientID,new Date()).id
-     val vine:Vine=DaoVine.getVines().head
+     val vine:Vine=DaoVine.getAllItems.head
      vine.label.contentEquals("test1")
      vine.id.equals(firstId)
      vine.clientID.equals(clientID)
@@ -111,7 +111,7 @@ class DaoVineTest extends BaseTest  {
      val clientID:Option[Long]=Some(DaoTestUtils.getSampleClient().id)
      val recipeID:Option[Long]=Some(DaoTestUtils.getSampleRecipe().id)
      val firstId:Long=   DaoVine.createVineWithRecipe("test1","description",clientID,recipeID,new Date()).id
-     val vine:Vine=DaoVine.getVines().head
+     val vine:Vine=DaoVine.getAllItems.head
      vine.label.contentEquals("test1")
      vine.id.equals(firstId)
      vine.clientID.equals(clientID)
@@ -124,14 +124,14 @@ class DaoVineTest extends BaseTest  {
      DaoTesting.cleanAll()
      val id:Long=DaoTestUtils.getSampleVine().id
      DaoVine.deleteVine(id)
-     DaoVine.getVines() must have size(0)      
+    DaoVine.getAllItems must have size(0)      
   }
    
    "delete vine with recipe" in   {
      DaoTesting.cleanAll()
      val id:Long=DaoTestUtils.getSampleRecipeVine().id
      DaoVine.deleteVine(id)
-     DaoVine.getVines() must have size(0)      
+    DaoVine.getAllItems must have size(0)      
   }
      "delete not existing vine" in   {
      DaoTesting.cleanAll()
