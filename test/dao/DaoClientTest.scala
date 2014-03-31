@@ -25,6 +25,7 @@ import dao.DaoVineHistory
 import dao.DaoRecipe
 import dao.DaoComment
 import dao.util.BaseTest
+import dao.util.DaoTestUtils
 
 
 class DaoClientTest extends BaseTest  {
@@ -34,34 +35,27 @@ class DaoClientTest extends BaseTest  {
 	  DaoTesting.cleanAll()
       DaoClient.getAllItems must beEmpty
   }
-  "return sth after insert" in   {
-     DaoTesting.cleanAll()
-     DaoClient.createClient("1", "firstName", "lastName",new Date())
-     DaoClient.createClient("2", "firstName", "lastName",new Date())
-     DaoClient.getAllItems must have size(2)
-  }
-  
 }
 
 "create client" should {
    "create client" in  {
-     DaoTesting.cleanAll()
+//     DaoTesting.cleanAll()
+     
      DaoClient.createClient("1", "firstName", "lastName",new Date())
      DaoClient.createClient("2", "firstName", "lastName",new Date())
      DaoClient.createClient("3", "firstName", "lastName",new Date())
      DaoClient.getAllItems must have size(3)
   }
    "cannot create repeated user" in  {
-     DaoTesting.cleanAll()
-     DaoClient.createClient("1", "firstName", "lastName",new Date())
-     DaoClient.createClient("1", "firstName", "lastName",new Date())  must
+     val loginID=DaoTestUtils.getNextClientLogin
+     DaoClient.createClient(loginID, "firstName", "lastName",new Date())
+     DaoClient.createClient(loginID, "firstName", "lastName",new Date())  must
             throwA[IllegalArgumentException]
    }
    
     "save created client" in  {
-     DaoTesting.cleanAll()
-     val id:Long=  DaoClient.createClient("1", "firstName", "lastName",new Date()).id
-     val client:Client=DaoClient.getAllItems.head
+     val id:Long=  DaoTestUtils.getSampleClient.id
+     val client:Client=DaoClient.getItemForID(id)
      client.firstName.contentEquals("firstName")
      client.lastName.contentEquals("lastName")
      client.login==4
@@ -71,26 +65,29 @@ class DaoClientTest extends BaseTest  {
 
 "deleteClient" should {
     "delete client" in {
-     DaoTesting.cleanAll()
-     DaoClient.createClient("4", "firstName", "lastName",new Date())
-    DaoClient.getAllItems must have size(1)           
-     DaoClient.deleteClient("4");
-    DaoClient.getAllItems must have size(0)           
+     val originalSize= DaoClient.getAllItems.size
+     val preSize=originalSize+1
+     
+    val loginID=DaoTestUtils.getNextClientLogin
+     DaoClient.createClient(loginID, "firstName", "lastName",new Date())
+    DaoClient.getAllItems must have size(preSize)           
+     DaoClient.deleteClient(loginID);
+    DaoClient.getAllItems must have size(originalSize)           
   }
      "delete not existing client" in   {
-     DaoClient.getAllItems must beEmpty
-     DaoClient.deleteClient("4")
+     DaoClient.deleteClient("1111")
      true
   }
 }
 
 "activateClient" should {
     "activate client" in {
-     DaoTesting.cleanAll()
-     DaoClient.createClient("4", "firstName", "lastName",new Date())
-     val client:Client=DaoClient.getAllItems.head     
-     DaoClient.activateClient("4");
-     val activatedClient=DaoClient.getAllItems.head
+//     DaoTesting.cleanAll()C
+       val loginID=DaoTestUtils.getNextClientLogin
+    val clientID= DaoClient.createClient(loginID, "firstName", "lastName",new Date()).id
+     val client:Client=DaoClient.getItemForID(clientID) 
+     DaoClient.activateClient(loginID);
+     val activatedClient=DaoClient.getItemForID(clientID) 
      client.active must beFalse //new born users are NOT active
      activatedClient.active must  beTrue
 }
@@ -98,13 +95,15 @@ class DaoClientTest extends BaseTest  {
 
 "deactivateClient" should {
     "deactivate client" in {
-      DaoTesting.cleanAll()
-      DaoClient.createClient("4", "firstName", "lastName",new Date())
-     val client:Client=DaoClient.getAllItems.head     
-     DaoClient.activateClient("4");
-     val activatedClient=DaoClient.getAllItems.head
-     DaoClient.deactivateClient("4");
-     val deactivatedClient=DaoClient.getAllItems.head
+//      DaoTesting.cleanAll()
+      
+       val loginID=DaoTestUtils.getNextClientLogin
+    val clientID= DaoClient.createClient(loginID, "firstName", "lastName",new Date()).id
+     val client:Client=DaoClient.getItemForID(clientID)
+     DaoClient.activateClient(loginID);
+     val activatedClient=DaoClient.getItemForID(clientID) 
+     DaoClient.deactivateClient(loginID);
+     val deactivatedClient=DaoClient.getItemForID(clientID) 
      client.active must beFalse //new born users are NOT active
      activatedClient.active must  beTrue
      deactivatedClient.active must beFalse 

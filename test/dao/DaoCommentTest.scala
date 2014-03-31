@@ -9,10 +9,6 @@ import play.api.test._
 import play.api.test.Helpers._
 import java.util.Date
 import play.api.Play
-import dao.DaoTesting
-import dao.DaoClient
-import dao.DaoVine
-import dao.DaoComment
 import dao.util.BaseTest
 import dao.util.DaoTestUtils
 
@@ -47,7 +43,6 @@ class DaoCommentTest extends BaseTest  {
  
  "activateVineComment" should {
    "activateVineComment" in   {
-       DaoTesting.cleanAll()
        val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
        val vineID:Option[Long]=Some(DaoVine.createVine("test2","description",clientID,new Date()).id)
        val commentID:Long=DaoComment.createComment("first comment", vineID, clientID, new Date()).id
@@ -65,7 +60,6 @@ class DaoCommentTest extends BaseTest  {
   
   "deactivateVineComment" should {
     "deactivateVineComment" in   {
-       DaoTesting.cleanAll()
        val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
        val vineID:Option[Long]=Some(DaoVine.createVine("test2","description",clientID,new Date()).id)
        val commentID:Long=DaoComment.createComment("first comment", vineID, clientID, new Date()).id
