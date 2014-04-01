@@ -34,3 +34,4 @@ dist
 .metadata/.plugins/org.eclipse.ui.workbench/workingsets.xml
 .metadata/.plugins/org.scala-ide.sdt.core/scala-ide.log
 .metadata/version.ini
+*.class

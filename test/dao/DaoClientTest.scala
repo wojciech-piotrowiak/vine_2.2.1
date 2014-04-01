@@ -30,21 +30,15 @@ import dao.util.DaoTestUtils
 
 class DaoClientTest extends BaseTest  {
 
-"getClient"  should {
-   "be empty after clean " in   {
-	  DaoTesting.cleanAll()
-      DaoClient.getAllItems must beEmpty
-  }
-}
 
 "create client" should {
    "create client" in  {
-//     DaoTesting.cleanAll()
-     
+     val originalSize= DaoClient.getAllItems.size
+     val postSize=originalSize+3
      DaoClient.createClient("1", "firstName", "lastName",new Date())
      DaoClient.createClient("2", "firstName", "lastName",new Date())
      DaoClient.createClient("3", "firstName", "lastName",new Date())
-     DaoClient.getAllItems must have size(3)
+     DaoClient.getAllItems must have size(postSize)
   }
    "cannot create repeated user" in  {
      val loginID=DaoTestUtils.getNextClientLogin
@@ -82,7 +76,6 @@ class DaoClientTest extends BaseTest  {
 
 "activateClient" should {
     "activate client" in {
-//     DaoTesting.cleanAll()C
        val loginID=DaoTestUtils.getNextClientLogin
     val clientID= DaoClient.createClient(loginID, "firstName", "lastName",new Date()).id
      val client:Client=DaoClient.getItemForID(clientID) 
@@ -95,8 +88,6 @@ class DaoClientTest extends BaseTest  {
 
 "deactivateClient" should {
     "deactivate client" in {
-//      DaoTesting.cleanAll()
-      
        val loginID=DaoTestUtils.getNextClientLogin
     val clientID= DaoClient.createClient(loginID, "firstName", "lastName",new Date()).id
      val client:Client=DaoClient.getItemForID(clientID)

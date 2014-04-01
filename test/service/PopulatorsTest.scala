@@ -41,7 +41,6 @@ import anorm._
     }
     
     " populate full  object" in   {
-      DaoTesting.cleanAll
        val client:Option[Client]=Some(DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName"))
        val clientData=ClientPopulator.populate(client)
        clientData.firstName equals client.get.firstName
@@ -55,7 +54,6 @@ import anorm._
   "populate comment " should {
    
     "populate full object" in   {
-      DaoTesting.cleanAll
       val client:Client=(DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName"))
       val vine:Vine=DataService.createVine("label","description",client,None);
       val comment:Option[VineComment]=Some(DataService.createComment("login",vine, client))
@@ -77,7 +75,6 @@ import anorm._
   "populate recipe " should {
    
     "populate full object" in   {
-      DaoTesting.cleanAll
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val recipe:Recipe=DataService.createRecipe(client,"label","description")
       val recipeData=RecipePopulator.populate(Some(recipe))
@@ -95,7 +92,6 @@ import anorm._
   "populate vine_history" should {
    
     "populate full object" in   {
-     DaoTesting.cleanAll
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val vine:Vine=DataService.createVine("label","description",client,None);
       val vineHistory:VineHistory=DataService.createVineHistory(vine, "label", "description")
@@ -114,7 +110,6 @@ import anorm._
   "populate vine" should {
    
     "populate full object" in   {
-     DaoTesting.cleanAll
      val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
      val vineModel:Vine=DataService.createVine("label","description",client,None);
      val vineData=VinePopulator.populate(Some(vineModel))

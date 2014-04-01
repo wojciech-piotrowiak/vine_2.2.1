@@ -31,24 +31,24 @@ import dao.util.DaoTestUtils
 class DaoRecipeTest extends BaseTest {
 
 "getRecipies" should {
-  "be empty after clean " in  {
-	  DaoTesting.cleanAll()
-      DaoRecipe.getAllItems must beEmpty
-  }
   "return sth after insert" in   {
-	  DaoTesting.cleanAll()
+//	  DaoTesting.cleanAll()
+	  val originalSize= DaoRecipe.getAllItems.size
+      val postSize=originalSize+1
       val recipeID=DaoTestUtils.getSampleRecipe().id
-      DaoRecipe.getAllItems must have size(1)
+      DaoRecipe.getAllItems must have size(postSize)
   }
   "getRecipiesForClientID " in   {
-	  DaoTesting.cleanAll()
+//	  DaoTesting.cleanAll()
+      val originalSize= DaoRecipe.getAllItems.size
+      val postSize=originalSize+4
 	  val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
 	  DaoRecipe.createRecipe("recipeLabel", "recipeDescription", clientID, new Date())
 	  DaoRecipe.createRecipe("recipeLabel", "recipeDescription", clientID, new Date())
 	  DaoRecipe.createRecipe("recipeLabel", "recipeDescription", clientID, new Date())
 	  val clientID2:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
 	  DaoRecipe.createRecipe("recipeLabel", "recipeDescription", clientID2, new Date())
-	 DaoRecipe.getAllItems must have size(4)
+	 DaoRecipe.getAllItems must have size(postSize)
 	  DaoRecipe.getRecipiesForClientID(clientID) must have size(3)
 	  DaoRecipe.getRecipiesForClientID(clientID2) must have size(1)
   }
@@ -61,17 +61,19 @@ class DaoRecipeTest extends BaseTest {
 
 "createRecipe" should {
    "create recipe" in   {
-     DaoTesting.cleanAll()
+//     DaoTesting.cleanAll()
+     val originalSize= DaoRecipe.getAllItems.size
+      val postSize=originalSize+2
      DaoTestUtils.getSampleRecipe()
      DaoTestUtils.getSampleRecipe()
-     DaoRecipe.getAllItems must have size(2)
+     DaoRecipe.getAllItems must have size(postSize)
   }
    
     "save created recipe" in   {
-     DaoTesting.cleanAll()
+//     DaoTesting.cleanAll()
       val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
-     DaoRecipe.createRecipe("label", "description", clientID, new Date())
-     val recipe:Recipe=DaoRecipe.getAllItems.head
+     val recipeID=DaoRecipe.createRecipe("label", "description", clientID, new Date()).id
+     val recipe:Recipe=DaoRecipe.getItemForID(recipeID)
      recipe.label.contentEquals("label")
      recipe.description.contentEquals("description")
      clientID.get.equals(recipe.creatorID)
@@ -81,22 +83,26 @@ class DaoRecipeTest extends BaseTest {
 
 "deleteRecipe" should {
    "delete empty recipe" in {
-     DaoTesting.cleanAll()
+//     DaoTesting.cleanAll()
+     val originalSize= DaoRecipe.getAllItems.size
+      val postSize=originalSize+1
      val recipeID=DaoTestUtils.getSampleRecipe().id
-    DaoRecipe.getAllItems must have size(1) 
+    DaoRecipe.getAllItems must have size(postSize) 
      DaoRecipe.deleteRecipe(Some(recipeID))
-     DaoRecipe.getAllItems must have size(0) 
+     DaoRecipe.getAllItems must have size(originalSize) 
   }
    
     "delete non empty recipe" in  {
-    DaoTesting.cleanAll()
+//    DaoTesting.cleanAll()
+       val originalSize= DaoRecipe.getAllItems.size
+      val postSize=originalSize+1
      val recipeID=DaoTestUtils.getSampleRecipe().id
      val clientID=DaoTestUtils.getSampleClient().id
      DaoVine.createVineWithRecipe("label", "description",Some(clientID),Some(recipeID), new Date())
      DaoVine.createVineWithRecipe("label2","description", Some(clientID),Some(recipeID), new Date())
-     DaoRecipe.getAllItems must have size(1) 
+     DaoRecipe.getAllItems must have size(postSize) 
      DaoRecipe.deleteRecipe(Some(recipeID))
-     DaoRecipe.getAllItems must have size(0) 
+     DaoRecipe.getAllItems must have size(originalSize) 
   }
      "delete not existing recipe" in   {
      DaoRecipe.deleteRecipe(Some(154))
@@ -110,13 +116,13 @@ class DaoRecipeTest extends BaseTest {
 }
 "activateRecipe" should {
    "activateRecipe" in {
-     DaoTesting.cleanAll()
+//     DaoTesting.cleanAll()
      val recipeID=DaoTestUtils.getSampleRecipe().id
-     DaoRecipe.getAllItems.head.visible must beTrue
+     DaoRecipe.getItemForID(recipeID).visible must beTrue
      DaoRecipe.deactivateRecipe(Some(recipeID))
-     DaoRecipe.getAllItems.head.visible must beFalse
+     DaoRecipe.getItemForID(recipeID).visible must beFalse
      DaoRecipe.activateRecipe(Some(recipeID))
-     DaoRecipe.getAllItems.head.visible must beTrue
+     DaoRecipe.getItemForID(recipeID).visible must beTrue
   }
    "throw errow when activating None recipe" in  {
      DaoRecipe.activateRecipe(None) must
@@ -126,11 +132,11 @@ class DaoRecipeTest extends BaseTest {
 
 "deactivateRecipe" should {
    "deactivateRecipe" in {
-     DaoTesting.cleanAll()
+//     DaoTesting.cleanAll()
      val recipeID=DaoTestUtils.getSampleRecipe().id
-     DaoRecipe.getAllItems.head.visible must beTrue
+     DaoRecipe.getItemForID(recipeID).visible must beTrue
      DaoRecipe.deactivateRecipe(Some(recipeID))
-     DaoRecipe.getAllItems.head.visible must beFalse
+      DaoRecipe.getItemForID(recipeID).visible must beFalse
   }
    
    "throw errow when deactivating None recipe" in  {

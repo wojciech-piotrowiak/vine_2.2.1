@@ -21,39 +21,30 @@ import dao.util.DaoTestUtils
 class DaoVineHistoryTest extends BaseTest  {
 
 "getVineHistory"  should {
-   "return nothing for empty vine table" in   {
-	  DaoTesting.cleanAll()
-      DaoVineHistory.getVineHistory(DaoTestUtils.getSampleClient().id) must beEmpty
-  }
    
    "return sth for active vine without recipe" in  {
-	  DaoTesting.cleanAll()
 	  val vineID=DaoTestUtils.getSampleVine()
       DaoVineHistory.createVineHistory("history", "description", vineID.id, new Date())
       DaoVineHistory.getVineHistory(vineID.id) must have size(1)
   }
    
     "return sth for active vine with recipe" in  {
-	  DaoTesting.cleanAll()
       val vineID=  DaoTestUtils.getSampleRecipeVine().id
       DaoVineHistory.createVineHistory("history", "description", vineID, new Date())
       DaoVineHistory.getVineHistory(vineID) must have size(1)
   }
     
    "return sth for active auto vine with recipe" in  {
-	  DaoTesting.cleanAll()
       val vineID=  DaoTestUtils.getSampleRecipeAutoVine().id
       DaoVineHistory.createVineHistory("history", "description", vineID, new Date())
       DaoVineHistory.getVineHistory(vineID) must have size(1)
   }  
  
   "return nothing for not existing vine" in  {
-	  DaoTesting.cleanAll()
       DaoVineHistory.getVineHistory(22) must beEmpty
   }
   
    "return sth in right order-single user without recipe" in  {
-	  DaoTesting.cleanAll()
 	  val vineID=DaoTestUtils.getSampleVine()
 	  val firstDate:Date=new Date();
 	  val secondDate:Date=new Date();
@@ -66,7 +57,6 @@ class DaoVineHistoryTest extends BaseTest  {
   }
    
     "return sth in right order-multi user without recipe" in   {
-	  DaoTesting.cleanAll()	  
 	  val firstClientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
 	  val firstVineID=DaoVine.createVine("test1","description",firstClientID,new Date()).id
 	  
@@ -93,7 +83,6 @@ class DaoVineHistoryTest extends BaseTest  {
     
     
      "return sth in right order-single user with recipe" in  {
-	  DaoTesting.cleanAll()
 	  val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
 	  val recipeID:Option[Long]=Some(DaoRecipe.createRecipe("label", "description", clientID, new Date()).id)
 	  val vineID=DaoVine.createVineWithRecipe("test2","description",clientID,recipeID,new Date())
@@ -108,7 +97,6 @@ class DaoVineHistoryTest extends BaseTest  {
   }
    
     "return sth in right order-multi user with recipe" in   {
-	  DaoTesting.cleanAll()	  
 	  val firstClientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
 	  val recipeID:Option[Long]=Some(DaoRecipe.createRecipe("label", "description", firstClientID, new Date()).id)
 	  val firstVineID=DaoVine.createVineWithRecipe("test1","description",firstClientID,recipeID,new Date())
@@ -137,7 +125,6 @@ class DaoVineHistoryTest extends BaseTest  {
 
 "deleteVineHistory" should {
    "delete vine history" in  {
-     DaoTesting.cleanAll()
      val vineID:Long=DaoTestUtils.getSampleVine().id
      val vineHistoryID=DaoVineHistory.createVineHistory("label", "description", vineID, new Date())
      DaoVineHistory.getVineHistory(vineID) must have size(1) 
@@ -145,7 +132,6 @@ class DaoVineHistoryTest extends BaseTest  {
      DaoVineHistory.getVineHistory(vineID)  must have size(0)      
   }
      "delete not existing vine history" in   {
-     DaoTesting.cleanAll()
      DaoVineHistory.deleteVineHistory(Some(241))
      true
   }
@@ -157,7 +143,6 @@ class DaoVineHistoryTest extends BaseTest  {
 
 "activateVineHistory" should {
    "activateVineHistory" in  {
-     DaoTesting.cleanAll()
      val vineID:Long=DaoTestUtils.getSampleVine().id
      val vineHistoryID=DaoVineHistory.createVineHistory("label", "description", vineID, new Date())
      DaoVineHistory.getVineHistory(vineID).head.visible must beTrue
@@ -176,7 +161,6 @@ class DaoVineHistoryTest extends BaseTest  {
 
 "deactivateVineHistory" should {
    "deactivateVineHistory" in  {
-     DaoTesting.cleanAll()
      val vineID:Long=DaoTestUtils.getSampleVine().id
      val vineHistoryID=DaoVineHistory.createVineHistory("label", "description", vineID, new Date())
      DaoVineHistory.getVineHistory(vineID).head.visible must beTrue
