@@ -16,7 +16,7 @@ class BaseTest extends Specification   {
   }
 //sequential
  lazy val app : FakeApplication = {
-        FakeApplication()
+        FakeApplication(additionalConfiguration = inMemoryDatabase())
         //additionalConfiguration = inMemoryDatabase()
     }
 

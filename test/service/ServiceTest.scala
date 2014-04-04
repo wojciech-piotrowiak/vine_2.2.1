@@ -32,26 +32,26 @@ import anorm._
   "createClient" should {
    
     "createClient" in   {
-	    DaoTesting.cleanAll
-	    val c:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
-	    c.login.contentEquals("login")
+        val login= DaoTestUtils.getNextClientLogin()
+	    val c:Client=DataService.createClient(login, "firstName", "lastName")
+	    c.login.contentEquals(login)
 	    c.firstName.contentEquals("firstName")
 	    c.lastName.contentEquals("lastName")
 	    c.active==true
     }
     
     "removeClient" in   {
-	    DaoTesting.cleanAll
+        val originalSize= DaoClient.getAllItems.size
+        val preSize=originalSize+1
 	    val c:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
-	    DaoClient.getAllItems.size==1
+	    DaoClient.getAllItems.size==preSize
 	    DataService.deleteModel(c);
-	    DaoClient.getAllItems.size==0
+	    DaoClient.getAllItems.size==originalSize
     }
     
     "getClientForID -existing" in   {
 	    val login:String=DaoTestUtils.getNextClientLogin()
 	    val c:Client=DataService.createClient(login, "firstName", "lastName")
-	    
 	    val client:Client=DataService.getClientForID(c.id)
 	    client.login.contentEquals(login)
 	    client.firstName.contentEquals("firstName")
@@ -67,7 +67,6 @@ import anorm._
 "createVine" should {
   
    "createVine without recipe" in   {
-      DaoTesting.cleanAll
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val vine:Vine=DataService.createVine("label","description",client,None);
       vine.label.contentEquals("label")
@@ -77,7 +76,6 @@ import anorm._
     }  
    
    "createVine with recipe" in  {
-      DaoTesting.cleanAll
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val recipe:Recipe=DataService.createRecipe(client, "label", "description")
       val vine:Vine=DataService.createVine("label","description",client,Option(recipe));
@@ -88,12 +86,13 @@ import anorm._
       vine.description.contentEquals("description")
     }
    "removeVine" in   {
-	  DaoTesting.cleanAll
+	  val originalSize= DaoVine.getAllItems.size
+      val preSize=originalSize+1
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val vine:Vine=DataService.createVine("label","description",client,None);
-	  DaoVine.getAllItems.size==1
+	  DaoVine.getAllItems.size==preSize
 	  DataService.deleteModel(vine);
-	  DaoVine.getAllItems.size==0
+	  DaoVine.getAllItems.size==originalSize
     }
    
    "getVineForID" in   {
@@ -117,7 +116,6 @@ import anorm._
 "createVineHistory" should {
   
    "createVineHistory" in   {
-      DaoTesting.cleanAll
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val vine:Vine=DataService.createVine("label","description",client,None);
       val vineHistory:VineHistory=DataService.createVineHistory(vine, "label", "description")
@@ -126,7 +124,6 @@ import anorm._
     }  
    
    "removeVineHistory" in   {
-	  DaoTesting.cleanAll
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val vine:Vine=DataService.createVine("label","description",client,None);
       val vineHistory:VineHistory=DataService.createVineHistory(vine, "label", "description")
@@ -155,7 +152,6 @@ import anorm._
 "createComment" should {
   
    "createComment" in   {
-      DaoTesting.cleanAll
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val vine:Vine=DataService.createVine("label","description",client,None);
       val comment:VineComment=DataService.createComment("content",vine,client)
@@ -165,7 +161,6 @@ import anorm._
     }  
    
    "removeComment" in   {
-      DaoTesting.cleanAll
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val vine:Vine=DataService.createVine("label","description",client,None);
       val comment:VineComment=DataService.createComment("content",vine,client)
@@ -177,7 +172,6 @@ import anorm._
    
    
     "getCommentForID" in   {
-      DaoTesting.cleanAll
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val vine:Vine=DataService.createVine("label","description",client,None);
       val comment:VineComment=DataService.createComment("content",vine,client)
@@ -199,7 +193,6 @@ import anorm._
   
 
    "createRecipe" in   {
-      DaoTesting.cleanAll
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val recipe:Recipe=DataService.createRecipe(client,"label","description")
       recipe.creatorID==client.id
@@ -208,7 +201,6 @@ import anorm._
     }  
    
    "removeRecipe" in   {
-	  DaoTesting.cleanAll
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val recipe:Recipe=DataService.createRecipe(client,"label","description")
       
@@ -220,7 +212,6 @@ import anorm._
    
     
    "getRecipeForID" in   {
-	  DaoTesting.cleanAll
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val recipe:Recipe=DataService.createRecipe(client,"label","description")
       val sRecipe:Recipe=DataService.getRecipeForID(recipe.id)

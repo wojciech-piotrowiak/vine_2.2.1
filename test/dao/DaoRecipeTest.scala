@@ -32,14 +32,12 @@ class DaoRecipeTest extends BaseTest {
 
 "getRecipies" should {
   "return sth after insert" in   {
-//	  DaoTesting.cleanAll()
 	  val originalSize= DaoRecipe.getAllItems.size
       val postSize=originalSize+1
       val recipeID=DaoTestUtils.getSampleRecipe().id
       DaoRecipe.getAllItems must have size(postSize)
   }
   "getRecipiesForClientID " in   {
-//	  DaoTesting.cleanAll()
       val originalSize= DaoRecipe.getAllItems.size
       val postSize=originalSize+4
 	  val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
@@ -61,7 +59,6 @@ class DaoRecipeTest extends BaseTest {
 
 "createRecipe" should {
    "create recipe" in   {
-//     DaoTesting.cleanAll()
      val originalSize= DaoRecipe.getAllItems.size
       val postSize=originalSize+2
      DaoTestUtils.getSampleRecipe()
@@ -70,7 +67,6 @@ class DaoRecipeTest extends BaseTest {
   }
    
     "save created recipe" in   {
-//     DaoTesting.cleanAll()
       val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
      val recipeID=DaoRecipe.createRecipe("label", "description", clientID, new Date()).id
      val recipe:Recipe=DaoRecipe.getItemForID(recipeID)
@@ -83,7 +79,6 @@ class DaoRecipeTest extends BaseTest {
 
 "deleteRecipe" should {
    "delete empty recipe" in {
-//     DaoTesting.cleanAll()
      val originalSize= DaoRecipe.getAllItems.size
       val postSize=originalSize+1
      val recipeID=DaoTestUtils.getSampleRecipe().id
@@ -93,7 +88,6 @@ class DaoRecipeTest extends BaseTest {
   }
    
     "delete non empty recipe" in  {
-//    DaoTesting.cleanAll()
        val originalSize= DaoRecipe.getAllItems.size
       val postSize=originalSize+1
      val recipeID=DaoTestUtils.getSampleRecipe().id
@@ -116,7 +110,6 @@ class DaoRecipeTest extends BaseTest {
 }
 "activateRecipe" should {
    "activateRecipe" in {
-//     DaoTesting.cleanAll()
      val recipeID=DaoTestUtils.getSampleRecipe().id
      DaoRecipe.getItemForID(recipeID).visible must beTrue
      DaoRecipe.deactivateRecipe(Some(recipeID))
@@ -132,7 +125,6 @@ class DaoRecipeTest extends BaseTest {
 
 "deactivateRecipe" should {
    "deactivateRecipe" in {
-//     DaoTesting.cleanAll()
      val recipeID=DaoTestUtils.getSampleRecipe().id
      DaoRecipe.getItemForID(recipeID).visible must beTrue
      DaoRecipe.deactivateRecipe(Some(recipeID))

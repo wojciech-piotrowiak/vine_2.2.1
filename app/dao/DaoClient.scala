@@ -32,8 +32,12 @@ object DaoClient extends BaseDao[Client] {
   case id~gid~login~firstName~lastName~registered~active => Client(id,gid, login,firstName,lastName,registered,active)
   }
 }
-	
-  
+	def getCount():Long= {
+  return DB.withConnection { implicit c =>
+	SQL("select count(*) from client ").as(scalar[Long].single)
+   }
+  }
+   
 
   def createClient(login: String, firstName: String, lastName: String,registered:Date):BaseEntity= {
 	val  count:Long= DB.withConnection { implicit c =>
