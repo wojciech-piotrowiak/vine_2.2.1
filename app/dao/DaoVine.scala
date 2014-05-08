@@ -57,7 +57,7 @@ object DaoVine  extends BaseDao[Vine]{
 	  SQL("select nextval('vine_id_seq');").as(scalar[Long].single)
  	}
      
-      val gid=DaoUtils.getGid()  
+  val gid=DaoUtils.getGid()  
       
   val  seq:Long=  DB.withConnection { implicit c =>
    	SQL("insert into vine (id,gid,label,description,client,recipe,created,visible) values ({id},{gid},{label},{description},{client},{recipe},{created},{visible})").on(
@@ -103,6 +103,8 @@ object DaoVine  extends BaseDao[Vine]{
     ).execute()
   }
 }
+  
+  
   
  
 }
