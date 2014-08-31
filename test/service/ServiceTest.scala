@@ -50,17 +50,16 @@ import anorm._
     }
     
     "getClientForID -existing" in   {
-	    val login:String=DaoTestUtils.getNextClientLogin()
+	    val login=DaoTestUtils.getNextClientLogin()
 	    val c:Client=DataService.createClient(login, "firstName", "lastName")
-	    val client:Client=DataService.getClientForID(c.id)
+	    val client:Client=DataService.getClientForLogin(login).get
 	    client.login.contentEquals(login)
 	    client.firstName.contentEquals("firstName")
 	    client.lastName.contentEquals("lastName")
     }
     
      "getClientFor nonexisting ID" in   {
-	   DataService.getClientForID(12345)must
-            throwA[IllegalArgumentException]
+	   DataService.getClientForLogin("12345" ).eq(None)
     }
 }
 

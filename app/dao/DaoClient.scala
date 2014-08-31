@@ -65,7 +65,15 @@ object DaoClient extends BaseDao[Client] {
 	    return new BaseEntity(token,gid)
 }
 	  
- 
+  def getClientForLogin(login: String) :Option[Client]= {
+   DB.withConnection { implicit c =>
+   return Some(SQL("select * from client where login = {login}").on(
+      'login -> login
+    ).single(getRowParser))
+  }
+}
+  
+  
   def deleteClient(login: String) {
   DB.withConnection { implicit c =>
     SQL("delete from client where login = {login}").on(

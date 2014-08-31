@@ -37,16 +37,21 @@ object DataService {
    return client;
  }
  
- def getClientForID(id:Long) :Client= {
+  def saveClient(clientID:Long) :Client= {
+   val client:Client= DaoClient.getItemForID(clientID)
+   return client;
+ }
+ 
+ 
+  def getClientForLogin(id:String) :Option[Client]= {
    try{
-   return getModelForID(DaoClient, id).asInstanceOf[Client]
+    return DaoClient.getClientForLogin(id)
    }
    catch
    {
      //SqlMappingError
-     case e: Exception => throw new IllegalArgumentException("Client does not exist")
+     case e: Exception => return None
    }
-  return null
  }
  
   def createVine(label: String,description:String,client: Client,recipe:Option[Recipe]) :Vine= {

@@ -11,8 +11,11 @@ import pojo.VineData
 import pojo.VineData
 import populators.VinePopulator
 import scala.collection.mutable.ListBuffer
+import securesocial.core._
+import securesocial.core.java.SecureSocial.SecuredAction
+import services.DataService
 
-object Application extends Controller {
+object Application extends Controller  with securesocial.core.SecureSocial {
 
  val vineForm = Form(
   mapping(
@@ -37,8 +40,12 @@ def vines = Action {
   Redirect(routes.Application.vines)
 }
   
-  def newVine = Action { 
+  def newVine =SecuredAction  { 
+
     implicit request =>
+      
+		val user:Identity = request.user 
+		
   vineForm.bindFromRequest.fold(
       
     errors => BadRequest(views.html.index(List[VineData](), vineForm)
@@ -46,6 +53,8 @@ def vines = Action {
     label => {
       
    val  vine:VineData= vineForm.bindFromRequest().get
+  val client=DataService.getClientForLogin(user.identityId.userId)
+   DataService.createVine(vine.label,vine.description,client.get,None)
 //   DaoVine.createVine(vine.label,vine.description,Option(vine.client),vine.created)
       Redirect(routes.Application.vines)
     }
