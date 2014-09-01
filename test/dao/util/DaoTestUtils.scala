@@ -24,7 +24,7 @@ import dao.BaseEntity
 object DaoTestUtils {
   
 def getNextClientLogin() :String={
-  var clientNumber= DaoClient.getCount
+  var clientNumber= DaoClient.getAllItems.size
   clientNumber=clientNumber+10
   return clientNumber.toString()
 }  
