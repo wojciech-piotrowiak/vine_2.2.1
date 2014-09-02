@@ -48,7 +48,7 @@ object DaoComment extends BaseDao[VineComment] {
 }
    
    
-     def createComment(content: String,vine:Option[Long],creator:Option[Long],created:Date) :BaseEntity= {
+     def createComment(content: String,vineID:Option[Long],creatorID:Option[Long],created:Date) :BaseEntity= {
    val  id:Long= DB.withConnection { implicit c =>
 	  SQL("select nextval('vine_comment_id_seq');").as(scalar[Long].single)
  	 }
@@ -56,7 +56,7 @@ object DaoComment extends BaseDao[VineComment] {
    val gid=DaoUtils.getGid()
    val  seq:Long=  DB.withConnection { implicit c =>
    	SQL("insert into vinecomment (id,gid,content,vine,creator,created,restricted,visible) values ({id},{gid},{content},{vine},{creator},{created},{restricted},{visible})").on(
-   	'id->id,'gid -> gid,'content -> content,'vine->vine,'creator->creator,'created->created,'restricted->false,'visible->true).executeUpdate()
+   	'id->id,'gid -> gid,'content -> content,'vine->vineID,'creator->creatorID,'created->created,'restricted->false,'visible->true).executeUpdate()
   }
   return new BaseEntity(id,gid);
 }

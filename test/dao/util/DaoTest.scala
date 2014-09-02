@@ -59,7 +59,7 @@ class DaoTest extends BaseTest   {
      "comments empty" in   {
       DaoTesting.cleanAll()
       val clientID=DaoTestUtils.getSampleClient().id
-      val vineID=DaoTestUtils.getSampleClient().id
+      val vineID=DaoTestUtils.getSampleVine().id
       DaoComment.createComment("content", Some(vineID), Some(clientID), new Date())
       DaoTesting.cleanAll()
       DaoComment.getCommentsForClient(Some(clientID)) must beEmpty
