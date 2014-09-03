@@ -20,9 +20,8 @@ object Application extends Controller  with securesocial.core.SecureSocial {
  val vineForm = Form(
   mapping(
     "label" -> text,
-    "description" -> text,
-     "client" -> number
-  )((label, description,client) => VineData(0,label,description,null,null,new Date()))
+    "description" -> text
+  )((label, description) => VineData(0,label,description,null,null,new Date()))
   //id: Long,label: String,description:String,clientID:String,recipe:RecipeData,created:Date
   ((t: VineData) => None))
   
