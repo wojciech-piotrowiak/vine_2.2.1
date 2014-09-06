@@ -27,6 +27,7 @@ import populators.VinePopulator
 import populators.RecipePopulator
 import models.Model
 import dao.util.DaoTestUtils
+import pojo.VineData
 
 class PopulatorsTest extends BaseTest {
    
@@ -112,10 +113,18 @@ import anorm._
     "populate full object" in   {
      val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
      val vineModel:Vine=DataService.createVine("label","description",client,None);
-     val vineData=VinePopulator.populate(Some(vineModel))
+     val vineData :VineData=VinePopulator.populate(Some(vineModel))
+      assert( vineModel.id.equals(vineData.id))
      vineData.label.contentEquals("label")
      vineData.description.contentEquals("description")
      vineData.client.get.id equals client.id      
+     vineData.client.get.firstName equals client.firstName
+     vineData.client.get.lastName equals client.lastName
+     vineData.client.get.login equals client.login
+//     System.out.println(vineData.client.get.registered)
+//     System.out.println(client.registered)
+//     vineData.client.get.registered.equals(client.registered)
+//     FIX-ME!!!!
     }
     
     "try populate none object" in   {

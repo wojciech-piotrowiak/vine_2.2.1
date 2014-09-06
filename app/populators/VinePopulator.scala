@@ -6,6 +6,8 @@ import pojo.VineHistoryData
 import models.Vine
 import pojo.VineData
 import pojo.ClientData
+import dao.DaoVine
+import dao.DaoClient
 
 object VinePopulator extends BasePopulator[Vine,VineData] {
 override def populate(vineModel:Option[Vine]) :VineData=
@@ -14,13 +16,13 @@ override def populate(vineModel:Option[Vine]) :VineData=
   if(vineModel.isDefined)
   {
    var cModel:Vine=vineModel.get
-   
+   vData.id=cModel.id
    vData.label=cModel.label
    vData.description=cModel.description
    
-   val cData:ClientData=new ClientData();
-   cData.id=vineModel.get.clientID
-   vData.client=Some(cData)
+   var clientModel= DaoClient.getItemForID(vineModel.get.clientID)
+   var clientData=  ClientPopulator.populate(Some(clientModel))
+   vData.client=Some(clientData)
   }
    return vData;
  }  

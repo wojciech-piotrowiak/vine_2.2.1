@@ -2,16 +2,16 @@
 
 @import helper._
 
-@main("Vine list") {
+@main("Play with vine") {
     
-    <h1>@vines.size task(s)</h1>
+    <h1>@vines.size Recent Vines: </h1>
     
     <ul>
         @vines.map { vine =>
             <li>
-                @vine.client
-                @vine.label
-                @vine.description
+               Login : @vine.client.get.login
+               Name: @vine.label
+               Description: @vine.description
                 
                 @form(routes.Application.deleteVine(vine.id)) {
                     <input type="submit" value="Delete">
