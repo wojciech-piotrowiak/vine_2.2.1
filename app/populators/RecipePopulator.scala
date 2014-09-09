@@ -2,6 +2,7 @@ package populators
 import pojo.RecipeData
 import models.Recipe
 import pojo.ClientData
+import dao.DaoClient
 
 object RecipePopulator extends BasePopulator[Recipe,RecipeData] {
 override def populate(recipeModel:Option[Recipe]) :RecipeData=
@@ -14,10 +15,9 @@ override def populate(recipeModel:Option[Recipe]) :RecipeData=
    cData.label=cModel.label
    cData.description=cModel.description
    
-   val client:ClientData=new ClientData();
-   client.id=recipeModel.get.creatorID
-   cData.creator=Some(client)
-   
+   var clientModel= DaoClient.getItemForID(recipeModel.get.creatorID)
+   var clientData=  ClientPopulator.populate(Some(clientModel))
+   cData.creator=Some(clientData)
   }
    return cData;
     

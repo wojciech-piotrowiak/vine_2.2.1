@@ -15,14 +15,13 @@ import securesocial.core._
 import securesocial.core.java.SecureSocial.SecuredAction
 import services.DataService
 
-object Application extends Controller  with securesocial.core.SecureSocial {
+object VineController extends Controller  with securesocial.core.SecureSocial {
 
  val vineForm = Form(
   mapping(
     "label" -> text,
     "description" -> text
   )((label, description) => VineData(0,label,description,null,null,new Date()))
-  //id: Long,label: String,description:String,clientID:String,recipe:RecipeData,created:Date
   ((t: VineData) => None))
   
 def vines = Action {
@@ -36,7 +35,7 @@ def vines = Action {
 }
   
   def index = Action {
-  Redirect(routes.Application.vines)
+  Redirect(routes.VineController.vines)
 }
   
   def newVine =SecuredAction  { 
@@ -55,13 +54,13 @@ def vines = Action {
   val client=DataService.getClientForLogin(user.identityId.userId)
    DataService.createVine(vine.label,vine.description,client.get,None)
 //   DaoVine.createVine(vine.label,vine.description,Option(vine.client),vine.created)
-      Redirect(routes.Application.vines)
+      Redirect(routes.VineController.vines)
     }
   )
 }
   def deleteVine(id: Long) = Action {
   DaoVine.deleteVine(id)
-  Redirect(routes.Application.vines)
+  Redirect(routes.VineController.vines)
 }
  
 

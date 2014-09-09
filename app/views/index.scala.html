@@ -13,7 +13,7 @@
                Name: @vine.label
                Description: @vine.description
                 
-                @form(routes.Application.deleteVine(vine.id)) {
+                @form(routes.VineController.deleteVine(vine.id)) {
                     <input type="submit" value="Delete">
                 }
             </li>
@@ -22,7 +22,7 @@
     
     <h2>Add a new vine</h2>
     
-    @form(routes.Application.newVine) {
+    @form(routes.VineController.newVine) {
         
         @inputText(vineForm("label")) 
         @inputText(vineForm("description")) 

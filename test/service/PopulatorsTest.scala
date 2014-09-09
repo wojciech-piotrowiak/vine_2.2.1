@@ -79,7 +79,9 @@ import anorm._
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
       val recipe:Recipe=DataService.createRecipe(client,"label","description")
       val recipeData=RecipePopulator.populate(Some(recipe))
-      recipeData.creator.get.id==client.id
+      assert(recipeData.creator.get.id.equals(client.id))
+      assert(recipeData.creator.get.firstName.equals(client.firstName))
+      assert( recipeData.creator.get.lastName.equals(client.lastName))
       recipeData.label equals recipe.label
       recipeData.description equals recipe.description
     }

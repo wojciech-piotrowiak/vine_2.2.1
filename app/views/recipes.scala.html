@@ -1,0 +1,34 @@
+@(recipes: List[pojo.RecipeData], recipeForm: Form[pojo.RecipeData])
+
+@import helper._
+
+@main("Play with vine") {
+    
+    <h1>@recipes.size Recent Recipes: </h1>
+    
+    <ul>
+        @recipes.map { recipe =>
+            <li>
+               Login : @recipe.creator.get.login
+               Name: @recipe.label
+               Description: @recipe.description
+                
+                @form(routes.RecipeController.deleteRecipe(recipe.id)) {
+                    <input type="submit" value="Delete">
+                }
+            </li>
+        }
+    </ul>
+    
+    <h2>Add a new recipe</h2>
+    
+    @form(routes.RecipeController.newRecipe) {
+        
+        @inputText(recipeForm("label")) 
+        @inputText(recipeForm("description")) 
+        
+        <input type="submit" value="Create">
+        
+    }
+    
+}
