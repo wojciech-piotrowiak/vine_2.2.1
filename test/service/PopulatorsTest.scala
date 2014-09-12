@@ -28,6 +28,8 @@ import populators.RecipePopulator
 import models.Model
 import dao.util.DaoTestUtils
 import pojo.VineData
+import populators.IdentityPopulator
+import securesocial.core.AuthenticationMethod
 
 class PopulatorsTest extends BaseTest {
    
@@ -134,6 +136,36 @@ import anorm._
             throwA[IllegalArgumentException]
     }
 }
+  
+  
+  
+  
+  
+    "populate identity" should {
+   
+    "populate SocialSecurityClient from client" in   {
+      val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
+      val identity= IdentityPopulator.populate(Some(client))
+      identity.firstName equals "firstName"
+      identity.lastName equals "lastName"
+      identity.email.get equals client.login
+      identity.oAuth1Info equals None
+      identity.oAuth2Info equals None
+      identity.avatarUrl equals None
+      identity.authMethod equals AuthenticationMethod.UserPassword
+      identity.identityId.providerId equals ""
+      identity.identityId.userId equals client.login
+    }
+    
+    "try populate none object" in   {
+     IdentityPopulator.populate(None) must
+            throwA[IllegalArgumentException]
+    }
+}
+  
+  
+  
+  
 
 }
 
