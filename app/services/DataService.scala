@@ -22,6 +22,7 @@ import dao.BaseEntity
 import anorm.RowParser
 import dao.BaseDao
 import dao.DaoRecipe
+import securesocial.core.Identity
 
 
 
@@ -37,9 +38,8 @@ object DataService {
    return client;
  }
  
-  def saveClient(clientID:Long) :Client= {
-   val client:Client= DaoClient.getItemForID(clientID)
-   return client;
+  def saveClient(client:Identity) = {
+   val client:Client= DaoClient.getItemForID(client.id)
  }
  
  

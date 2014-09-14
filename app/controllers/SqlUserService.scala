@@ -7,8 +7,8 @@ import securesocial.core.providers.Token
 import securesocial.core.IdentityId
 import dao.DaoClient
 import services.DataService
-import models.SocialSecurityClient
-import models.SocialSecurityIdentityId
+import socialsecurity.SocialSecurityClient
+import socialsecurity.SocialSecurityIdentityId
 import models.Client
 import populators.IdentityPopulator
 
@@ -39,7 +39,7 @@ import populators.IdentityPopulator
   def save(user: Identity): Identity = {
     DataService.getClientForLogin(user.identityId.userId)   match{
     case None=>  DataService.createClient(user.identityId.userId, user.firstName, user.lastName,user.passwordInfo.get.password)
-    case Some(_)=>  DataService.saveClient(user.identityId.userId.toLong)
+    case Some(_)=>  DataService.saveClient(user)
   }
     user
   }

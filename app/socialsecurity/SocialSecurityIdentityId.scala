@@ -1,4 +1,4 @@
-package models
+package socialsecurity
 
 import securesocial.core.IdentityId
 

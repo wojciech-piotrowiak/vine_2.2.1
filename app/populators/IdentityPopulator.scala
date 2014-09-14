@@ -1,8 +1,8 @@
 package populators
 
-import models.SocialSecurityClient
+import socialsecurity.SocialSecurityClient
 import models.Client
-import models.SocialSecurityIdentityId
+import socialsecurity.SocialSecurityIdentityId
 import securesocial.core.AuthenticationMethod
 import securesocial.core.PasswordInfo
 import socialsecurity.SocialSecurityPasswordInfo
