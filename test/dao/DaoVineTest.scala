@@ -150,9 +150,9 @@ class DaoVineTest extends BaseTest  {
     }
      
     "return sth for active client" in   {
-      val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin, "firstName", "lastName",new Date()).id)
+      val clientID:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
      DaoVine.createVine( "testVine","description",clientID,new Date())
-      val clientID2:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin, "firstName", "lastName",new Date()).id)
+      val clientID2:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
      DaoVine.createVine( "testVine","description",clientID2,new Date())
      DaoVine.getVinesForClientID(clientID).size.equals(1)
     }
@@ -171,7 +171,7 @@ class DaoVineTest extends BaseTest  {
 "deactivateVine" should {
   
   "deactivateVine" in {
-     val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin, "firstName", "lastName",new Date()).id)
+     val clientID:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
      val id:Long=DaoVine.createVine( "testVine","description",clientID,new Date()).id
      DaoVine.getVinesForClientID(clientID).head.visible must beTrue
      DaoVine.deactivateVine(Some(id));
@@ -186,7 +186,7 @@ class DaoVineTest extends BaseTest  {
 "activateVine" should {
   
   "activateVine" in {
-     val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin, "firstName", "lastName",new Date()).id)
+     val clientID:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
      val id:Long=DaoVine.createVine( "testVine","description",clientID,new Date()).id
      DaoVine.getVinesForClientID(clientID).head.visible must beTrue
      DaoVine.deactivateVine(Some(id))

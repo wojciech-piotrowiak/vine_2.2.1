@@ -40,11 +40,11 @@ class DaoRecipeTest extends BaseTest {
   "getRecipiesForClientID " in   {
       val originalSize= DaoRecipe.getAllItems.size
       val postSize=originalSize+4
-	  val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
+	  val clientID:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
 	  DaoRecipe.createRecipe("recipeLabel", "recipeDescription", clientID, new Date())
 	  DaoRecipe.createRecipe("recipeLabel", "recipeDescription", clientID, new Date())
 	  DaoRecipe.createRecipe("recipeLabel", "recipeDescription", clientID, new Date())
-	  val clientID2:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
+	  val clientID2:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
 	  DaoRecipe.createRecipe("recipeLabel", "recipeDescription", clientID2, new Date())
 	 DaoRecipe.getAllItems must have size(postSize)
 	  DaoRecipe.getRecipiesForClientID(clientID) must have size(3)
@@ -67,7 +67,7 @@ class DaoRecipeTest extends BaseTest {
   }
    
     "save created recipe" in   {
-      val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
+      val clientID:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
      val recipeID=DaoRecipe.createRecipe("label", "description", clientID, new Date()).id
      val recipe:Recipe=DaoRecipe.getItemForID(recipeID)
      recipe.label.contentEquals("label")

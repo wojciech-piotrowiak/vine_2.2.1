@@ -31,7 +31,7 @@ def getNextClientLogin() :String={
    
 def getSampleClient():BaseEntity=
 {
-  return  DaoClient.createClient(getNextClientLogin(), "firstName", "lastName",new Date())
+  return  DaoClient.createClient(getNextClientLogin(), "firstName", "lastName",new Date(),"password")
 }
 
 def getSampleVine():BaseEntity=

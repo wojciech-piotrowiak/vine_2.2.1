@@ -29,10 +29,10 @@ case class DataService()
 
 object DataService {
   
- def createClient(login: String, firstName: String, lastName: String) :Client= {
+ def createClient(login: String, firstName: String, lastName: String,password:String) :Client= {
    val registered:Date=new Date()
-   val id:BaseEntity=DaoClient.createClient(login, firstName, lastName, registered)
-   val client:Client= new Client(id.id,id.gid, login,firstName,lastName, registered,true)
+   val id:BaseEntity=DaoClient.createClient(login, firstName, lastName, registered,password)
+   val client:Client= new Client(id.id,id.gid, login,firstName,lastName, registered,true,password)
    client.setGid(id.gid)
    return client;
  }

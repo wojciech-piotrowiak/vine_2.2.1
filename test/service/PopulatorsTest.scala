@@ -44,7 +44,7 @@ import anorm._
     }
     
     " populate full  object" in   {
-       val client:Option[Client]=Some(DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName"))
+       val client:Option[Client]=Some(DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName","password"))
        val clientData=ClientPopulator.populate(client)
        clientData.firstName equals client.get.firstName
        clientData.lastName equals client.get.lastName
@@ -57,7 +57,7 @@ import anorm._
   "populate comment " should {
    
     "populate full object" in   {
-      val client:Client=(DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName"))
+      val client:Client=(DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName","password"))
       val vine:Vine=DataService.createVine("label","description",client,None);
       val comment:Option[VineComment]=Some(DataService.createComment("login",vine, client))
       val commentData=CommentPopulator.populate(comment)
@@ -78,7 +78,7 @@ import anorm._
   "populate recipe " should {
    
     "populate full object" in   {
-      val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
+      val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName","password")
       val recipe:Recipe=DataService.createRecipe(client,"label","description")
       val recipeData=RecipePopulator.populate(Some(recipe))
       assert(recipeData.creator.get.id.equals(client.id))
@@ -97,7 +97,7 @@ import anorm._
   "populate vine_history" should {
    
     "populate full object" in   {
-      val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
+      val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName","password")
       val vine:Vine=DataService.createVine("label","description",client,None);
       val vineHistory:VineHistory=DataService.createVineHistory(vine, "label", "description")
       val vineHistoryData= VineHistoryPopulator.populate(Some(vineHistory))
@@ -115,7 +115,7 @@ import anorm._
   "populate vine" should {
    
     "populate full object" in   {
-     val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
+     val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName","password")
      val vineModel:Vine=DataService.createVine("label","description",client,None);
      val vineData :VineData=VinePopulator.populate(Some(vineModel))
       assert( vineModel.id.equals(vineData.id))
@@ -144,7 +144,8 @@ import anorm._
     "populate identity" should {
    
     "populate SocialSecurityClient from client" in   {
-      val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName")
+      DaoTestUtils.getSampleClient()
+      val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName","password")
       val identity= IdentityPopulator.populate(Some(client))
       identity.firstName equals "firstName"
       identity.lastName equals "lastName"
@@ -155,6 +156,9 @@ import anorm._
       identity.authMethod equals AuthenticationMethod.UserPassword
       identity.identityId.providerId equals ""
       identity.identityId.userId equals client.login
+      identity.passwordInfo.get.password equals client.password
+       identity.passwordInfo.get.hasher equals ""
+       identity.passwordInfo.get.salt equals None
     }
     
     "try populate none object" in   {

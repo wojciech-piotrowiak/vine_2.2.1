@@ -38,7 +38,7 @@ import populators.IdentityPopulator
 
   def save(user: Identity): Identity = {
     DataService.getClientForLogin(user.identityId.userId)   match{
-    case None=>  DataService.createClient(user.identityId.userId, user.firstName, user.lastName)
+    case None=>  DataService.createClient(user.identityId.userId, user.firstName, user.lastName,user.passwordInfo.get.password)
     case Some(_)=>  DataService.saveClient(user.identityId.userId.toLong)
   }
     user

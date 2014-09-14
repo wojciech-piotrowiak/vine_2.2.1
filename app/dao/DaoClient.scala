@@ -28,12 +28,13 @@ object DaoClient extends BaseDao[Client] {
   get[String]("firstName") ~
   get[String]("lastName") ~ 
   get[Date]("registered")~
+  get[String]("password") ~ 
   get[Boolean]("active") map{  
-  case id~gid~login~firstName~lastName~registered~active => Client(id,gid, login,firstName,lastName,registered,active)
+  case id~gid~login~firstName~lastName~registered~active~password => Client(id,gid, login,firstName,lastName,registered,password,active)
   }
 }
 
-  def createClient(login: String, firstName: String, lastName: String,registered:Date):BaseEntity= {
+  def createClient(login: String, firstName: String, lastName: String,registered:Date,password:String):BaseEntity= {
 	val  count:Long= DB.withConnection { implicit c =>
 	SQL("select count(*) from client where login={login}").on(
     'login -> login).as(scalar[Long].single)
@@ -47,11 +48,12 @@ object DaoClient extends BaseDao[Client] {
     val gid=DaoUtils.getGid()
      
      DB.withConnection { (implicit c =>
-   SQL("insert into client (gid,login,firstName,lastName,id,registered,active) values ({gid},{login},{firstName},{lastName},{id},{registered},{active})").on(
+   SQL("insert into client (gid,login,firstName,lastName,id,registered,active,password) values ({gid},{login},{firstName},{lastName},{id},{registered},{active},{password})").on(
       'gid -> gid,
       'login -> login,
 	  'firstName -> firstName,
 	  'lastName -> lastName,
+	  'password -> password,
 	  'id->token,
 	  'registered->registered,
 	  'active->false

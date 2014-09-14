@@ -35,15 +35,15 @@ class DaoClientTest extends BaseTest  {
    "create client" in  {
      val originalSize= DaoClient.getAllItems.size
      val postSize=originalSize+3
-     DaoClient.createClient("1", "firstName", "lastName",new Date())
-     DaoClient.createClient("2", "firstName", "lastName",new Date())
-     DaoClient.createClient("3", "firstName", "lastName",new Date())
+     DaoTestUtils.getSampleClient();
+     DaoTestUtils.getSampleClient();
+     DaoTestUtils.getSampleClient();
      DaoClient.getAllItems must have size(postSize)
   }
    "cannot create repeated user" in  {
      val loginID=DaoTestUtils.getNextClientLogin
-     DaoClient.createClient(loginID, "firstName", "lastName",new Date())
-     DaoClient.createClient(loginID, "firstName", "lastName",new Date())  must
+     DaoClient.createClient(loginID, "firstName", "lastName",new Date(),"password")
+     DaoClient.createClient(loginID, "firstName", "lastName",new Date(),"password")  must
             throwA[IllegalArgumentException]
    }
    
@@ -63,7 +63,7 @@ class DaoClientTest extends BaseTest  {
      val preSize=originalSize+1
      
     val loginID=DaoTestUtils.getNextClientLogin
-     DaoClient.createClient(loginID, "firstName", "lastName",new Date())
+     DaoClient.createClient(loginID, "firstName", "lastName",new Date(),"password")
     DaoClient.getAllItems must have size(preSize)           
      DaoClient.deleteClient(loginID);
     DaoClient.getAllItems must have size(originalSize)           
@@ -77,7 +77,7 @@ class DaoClientTest extends BaseTest  {
 "activateClient" should {
     "activate client" in {
        val loginID=DaoTestUtils.getNextClientLogin
-    val clientID= DaoClient.createClient(loginID, "firstName", "lastName",new Date()).id
+    val clientID= DaoClient.createClient(loginID, "firstName", "lastName",new Date(),"password").id
      val client:Client=DaoClient.getItemForID(clientID) 
      DaoClient.activateClient(loginID);
      val activatedClient=DaoClient.getItemForID(clientID) 
@@ -89,7 +89,7 @@ class DaoClientTest extends BaseTest  {
 "deactivateClient" should {
     "deactivate client" in {
        val loginID=DaoTestUtils.getNextClientLogin
-    val clientID= DaoClient.createClient(loginID, "firstName", "lastName",new Date()).id
+    val clientID= DaoClient.createClient(loginID, "firstName", "lastName",new Date(),"password").id
      val client:Client=DaoClient.getItemForID(clientID)
      DaoClient.activateClient(loginID);
      val activatedClient=DaoClient.getItemForID(clientID) 

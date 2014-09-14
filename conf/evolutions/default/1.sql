@@ -12,6 +12,7 @@ CREATE TABLE client (
 	lastName varchar(255),
 	registered timestamp NOT NULL,
 	active boolean,
+	password varchar(255),
 	PRIMARY KEY (id)
 );
 # --- !Downs

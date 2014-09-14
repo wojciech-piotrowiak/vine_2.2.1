@@ -4,6 +4,8 @@ import models.SocialSecurityClient
 import models.Client
 import models.SocialSecurityIdentityId
 import securesocial.core.AuthenticationMethod
+import securesocial.core.PasswordInfo
+import socialsecurity.SocialSecurityPasswordInfo
 
 object IdentityPopulator extends BasePopulator[Client,SocialSecurityClient] {
   
@@ -16,6 +18,10 @@ object IdentityPopulator extends BasePopulator[Client,SocialSecurityClient] {
     client.lastName=clientModel.get.lastName
     client.email=Some(clientModel.get.login)
     client.identityId=new SocialSecurityIdentityId(clientModel.get.login,"")
+    client.passwordInfo=Some(new SocialSecurityPasswordInfo("",clientModel.get.password,None))
+//    PasswordInfo pi;
+//    pi.
+//    client.passwordInfo=Option(new PasswordInfo ))
   }
    return client;
     

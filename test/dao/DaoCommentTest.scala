@@ -19,9 +19,9 @@ class DaoCommentTest extends BaseTest  {
    //be empty after clean covered
    
    "return sth" in   {
-      val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
+      val clientID:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
       val vineID:Option[Long]=Some(DaoVine.createVine("test2","description",clientID,new Date()).id)
-      val clientID2:Option[Long]=Some(DaoClient.createClient("login2", "firstName", "lastName",new Date()).id)
+      val clientID2:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
       DaoComment.createComment("first comment", vineID, clientID, new Date())
       DaoComment.createComment("second content", vineID, clientID, new Date())
       DaoComment.createComment("extra content", vineID, clientID2, new Date())
@@ -43,8 +43,8 @@ class DaoCommentTest extends BaseTest  {
  
  "activateVineComment" should {
    "activateVineComment" in   {
-       val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
-       val vineID:Option[Long]=Some(DaoVine.createVine("test2","description",clientID,new Date()).id)
+       val clientID:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
+        val vineID:Option[Long]=Some(DaoVine.createVine("test2","description",clientID,new Date()).id)
        val commentID:Long=DaoComment.createComment("first comment", vineID, clientID, new Date()).id
        DaoComment.getCommentsForClient(clientID).head.visible must beTrue
        DaoComment.deactivateVineComment(Some(commentID))
@@ -60,7 +60,7 @@ class DaoCommentTest extends BaseTest  {
   
   "deactivateVineComment" should {
     "deactivateVineComment" in   {
-       val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
+       val clientID:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
        val vineID:Option[Long]=Some(DaoVine.createVine("test2","description",clientID,new Date()).id)
        val commentID:Long=DaoComment.createComment("first comment", vineID, clientID, new Date()).id
        DaoComment.getCommentsForClient(clientID).head.visible must beTrue

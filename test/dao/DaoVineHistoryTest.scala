@@ -57,10 +57,10 @@ class DaoVineHistoryTest extends BaseTest  {
   }
    
     "return sth in right order-multi user without recipe" in   {
-	  val firstClientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
+	  val firstClientID:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
 	  val firstVineID=DaoVine.createVine("test1","description",firstClientID,new Date()).id
 	  
-	  val secondClientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
+	  val secondClientID:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
 	  val secondVineID=DaoVine.createVine("test2","description",secondClientID,new Date()).id
 	  
 	  val firstDate:Date=new Date();
@@ -83,7 +83,7 @@ class DaoVineHistoryTest extends BaseTest  {
     
     
      "return sth in right order-single user with recipe" in  {
-	  val clientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
+	  val clientID:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
 	  val recipeID:Option[Long]=Some(DaoRecipe.createRecipe("label", "description", clientID, new Date()).id)
 	  val vineID=DaoVine.createVineWithRecipe("test2","description",clientID,recipeID,new Date())
 	  val firstDate:Date=new Date();
@@ -97,11 +97,11 @@ class DaoVineHistoryTest extends BaseTest  {
   }
    
     "return sth in right order-multi user with recipe" in   {
-	  val firstClientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
+	  val firstClientID:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
 	  val recipeID:Option[Long]=Some(DaoRecipe.createRecipe("label", "description", firstClientID, new Date()).id)
 	  val firstVineID=DaoVine.createVineWithRecipe("test1","description",firstClientID,recipeID,new Date())
 	  
-	  val secondClientID:Option[Long]=Some(DaoClient.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName",new Date()).id)
+	  val secondClientID:Option[Long]=Some(DaoTestUtils.getSampleClient.id)
 	  val secondVineID=DaoVine.createVineWithRecipe("test2","description",secondClientID,recipeID,new Date())
 	  
 	  val firstDate:Date=new Date();
