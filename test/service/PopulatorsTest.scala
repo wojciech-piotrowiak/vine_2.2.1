@@ -46,11 +46,11 @@ import anorm._
     " populate full  object" in   {
        val client:Option[Client]=Some(DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName","password"))
        val clientData=ClientPopulator.populate(client)
-       clientData.firstName equals client.get.firstName
-       clientData.lastName equals client.get.lastName
-       clientData.login equals client.get.login
-       clientData.id equals client.get.id
-       clientData.registered equals client.get.registered
+       clientData.firstName shouldEqual client.get.firstName
+       clientData.lastName shouldEqual client.get.lastName
+       clientData.login shouldEqual client.get.login
+       clientData.id shouldEqual client.get.id
+       clientData.registered shouldEqual client.get.registered
     }
 }
   
@@ -61,9 +61,9 @@ import anorm._
       val vine:Vine=DataService.createVine("label","description",client,None);
       val comment:Option[VineComment]=Some(DataService.createComment("login",vine, client))
       val commentData=CommentPopulator.populate(comment)
-      commentData.id equals comment.get.id
-      commentData.created equals comment.get.created
-      commentData.content.contentEquals(comment.get.content)
+      commentData.id shouldEqual comment.get.id
+      commentData.created shouldEqual comment.get.created
+      commentData.content shouldEqual (comment.get.content)
 //       commentData.creator.id equals comment.get.creatorID
 //       commentData.vine.id equals comment.get.vineID
     }
@@ -84,8 +84,8 @@ import anorm._
       assert(recipeData.creator.get.id.equals(client.id))
       assert(recipeData.creator.get.firstName.equals(client.firstName))
       assert( recipeData.creator.get.lastName.equals(client.lastName))
-      recipeData.label equals recipe.label
-      recipeData.description equals recipe.description
+      recipeData.label shouldEqual recipe.label
+      recipeData.description shouldEqual recipe.description
     }
     
    "populate none object" in   {
@@ -121,10 +121,10 @@ import anorm._
       assert( vineModel.id.equals(vineData.id))
      vineData.label.contentEquals("label")
      vineData.description.contentEquals("description")
-     vineData.client.get.id equals client.id      
-     vineData.client.get.firstName equals client.firstName
-     vineData.client.get.lastName equals client.lastName
-     vineData.client.get.login equals client.login
+     vineData.client.get.id shouldEqual client.id      
+     vineData.client.get.firstName shouldEqual client.firstName
+     vineData.client.get.lastName shouldEqual client.lastName
+     vineData.client.get.login shouldEqual client.login
 //     System.out.println(vineData.client.get.registered)
 //     System.out.println(client.registered)
 //     vineData.client.get.registered.equals(client.registered)
@@ -147,18 +147,18 @@ import anorm._
       DaoTestUtils.getSampleClient()
       val client:Client=DataService.createClient(DaoTestUtils.getNextClientLogin(), "firstName", "lastName","password")
       val identity= IdentityPopulator.populate(Some(client))
-      identity.firstName equals "firstName"
-      identity.lastName equals "lastName"
-      identity.email.get equals client.login
-      identity.oAuth1Info equals None
-      identity.oAuth2Info equals None
-      identity.avatarUrl equals None
-      identity.authMethod equals AuthenticationMethod.UserPassword
-      identity.identityId.providerId equals ""
-      identity.identityId.userId equals client.login
-      identity.passwordInfo.get.password equals client.password
-       identity.passwordInfo.get.hasher equals ""
-       identity.passwordInfo.get.salt equals None
+      identity.firstName shouldEqual "firstName"
+      identity.lastName shouldEqual "lastName"
+      identity.email.get shouldEqual client.login
+      identity.oAuth1Info shouldEqual None
+      identity.oAuth2Info shouldEqual None
+      identity.avatarUrl shouldEqual None
+      identity.authMethod shouldEqual AuthenticationMethod.UserPassword
+      identity.identityId.providerId shouldEqual ""
+      identity.identityId.userId shouldEqual client.login
+      identity.passwordInfo.get.password shouldEqual client.password
+      identity.passwordInfo.get.hasher shouldEqual "bcrypt"
+       identity.passwordInfo.get.salt shouldEqual None
     }
     
     "try populate none object" in   {

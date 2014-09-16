@@ -18,10 +18,7 @@ object IdentityPopulator extends BasePopulator[Client,SocialSecurityClient] {
     client.lastName=clientModel.get.lastName
     client.email=Some(clientModel.get.login)
     client.identityId=new SocialSecurityIdentityId(clientModel.get.login,"")
-    client.passwordInfo=Some(new SocialSecurityPasswordInfo("",clientModel.get.password,None))
-//    PasswordInfo pi;
-//    pi.
-//    client.passwordInfo=Option(new PasswordInfo ))
+    client.passwordInfo=Some(new SocialSecurityPasswordInfo("bcrypt",clientModel.get.password,None))
   }
    return client;
     

@@ -38,8 +38,8 @@ object DataService {
    return client;
  }
  
-  def saveClient(client:Identity) = {
-   val client:Client= DaoClient.getItemForID(client.id)
+  def saveClient(identity:Identity) = {
+//   val client:Client= DaoClient.getItemForID(identity.identityId.userId)
  }
  
  
