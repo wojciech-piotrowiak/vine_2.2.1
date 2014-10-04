@@ -23,6 +23,13 @@ import dao.DaoComment
 import dao.DaoRecipe
 import dao.util.DaoTestUtils
 import service.util.ServiceTestUtils
+import populators.IdentityPopulator
+import socialsecurity.SocialSecurityPasswordInfo
+import socialsecurity.SocialSecurityIdentityId
+import securesocial.core.providers.utils.BCryptPasswordHasher
+import org.mindrot.jbcrypt.BCrypt
+import socialsecurity.SocialSecurityClient
+import securesocial.core.AuthenticationMethod
 
 class ServiceTest extends BaseTest {
    
@@ -55,14 +62,47 @@ import anorm._
 	    val login=DaoTestUtils.getNextClientLogin()
 	    val c:Client=DataService.createClient(login, "firstName", "lastName","password")
 	    val client:Client=DataService.getClientForLogin(login).get
-	    client.login.contentEquals(login)
-	    client.firstName.contentEquals("firstName")
-	    client.lastName.contentEquals("lastName")
+	    client.login shouldEqual login
+	    client.firstName shouldEqual "firstName"
+	    client.lastName shouldEqual "lastName"
     }
     
      "getClientFor nonexisting ID" in   {
 	   DataService.getClientForLogin("12345" ).eq(None)
     }
+}
+
+
+"saveClient" should {
+   
+    "saveClient" in   {
+        val login= DaoTestUtils.getNextClientLogin()
+	    val client:Client=DataService.createClient(login, "firstName", "lastName","password")
+	   val identity= IdentityPopulator.populate(Some(client))
+	   val salt= BCrypt.gensalt()
+	   
+	   identity.firstName="changedFirstName"
+	   identity.lastName="changedLastName"
+	   identity.passwordInfo=Some(new SocialSecurityPasswordInfo("bcrypt","changedPassword",Some(salt)))
+	   identity.email=Some(login)
+	   identity.identityId=new SocialSecurityIdentityId(login, "")
+	   DataService.saveClient(identity)
+	  val dbClient:Client= DataService.getClientForLogin(client.login).get
+	  
+	  dbClient.firstName shouldEqual "changedFirstName"
+	  dbClient.lastName shouldEqual "changedLastName"
+      dbClient.password shouldEqual BCrypt.hashpw("changedPassword",salt)
+        
+    }
+    
+// TODO!!!    
+//    "not save not existing Client" in   {
+//	   
+//        val identity= new SocialSecurityClient(new SocialSecurityIdentityId("1010",""),"","","",Some(""),None,AuthenticationMethod.UserPassword,None,None)
+//	   DataService.saveClient(identity) must
+//            throwA[IllegalArgumentException]
+//    }
+  
 }
 
 "createVine" should {
@@ -80,11 +120,11 @@ import anorm._
       val client:Client=ServiceTestUtils.getSampleClientModel
       val recipe:Recipe=DataService.createRecipe(client, "label", "description")
       val vine:Vine=DataService.createVine("label","description",client,Option(recipe));
-      vine.label.contentEquals("label")
+      vine.label shouldEqual "label"
       vine.clientID==client.id
       vine.visible==true
       vine.recipe.get==recipe.id
-      vine.description.contentEquals("description")
+      vine.description shouldEqual "description"
     }
    "removeVine" in   {
 	  val originalSize= DaoVine.getAllItems.size
@@ -218,8 +258,8 @@ import anorm._
       val sRecipe:Recipe=DataService.getRecipeForID(recipe.id)
      
 	 sRecipe.creatorID==client.id
-      sRecipe.label.contentEquals("label")
-      sRecipe.description.contentEquals("description")
+      sRecipe.label shouldEqual "label"
+      sRecipe.description shouldEqual "description"
     }
    
      

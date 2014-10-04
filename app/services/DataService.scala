@@ -23,6 +23,7 @@ import anorm.RowParser
 import dao.BaseDao
 import dao.DaoRecipe
 import securesocial.core.Identity
+import org.mindrot.jbcrypt.BCrypt
 
 
 
@@ -38,9 +39,17 @@ object DataService {
    return client;
  }
  
-  def saveClient(identity:Identity) = {
-//   val client:Client= DaoClient.getItemForID(identity.identityId.userId)
+  def saveClient(user:Identity) = {
+   DaoClient.getClientForLogin(user.identityId.userId)  match{
+    case None=> throw new IllegalArgumentException("Client does not exist")
+    case Some(client:Client)=>  populateAndSaveClientIdentity(user)
+  }
  }
+  
+  def populateAndSaveClientIdentity(user:Identity)={
+    val client:Client=new Client(1,1, user.email.get,user.firstName,user.lastName, new Date(),true,BCrypt.hashpw(user.passwordInfo.get.password,user.passwordInfo.get.salt.get))
+    DaoClient.updateClient(client)
+  }
  
  
   def getClientForLogin(id:String) :Option[Client]= {

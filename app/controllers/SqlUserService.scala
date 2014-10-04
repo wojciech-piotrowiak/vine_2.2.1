@@ -17,9 +17,6 @@ import populators.IdentityPopulator
   private var tokens = Map[String, Token]()
     
     def find(id: IdentityId): Option[Identity] = {
-      
-      
-
   DataService.getClientForLogin(id.userId)
    match{
           case Some(client:Client)=> return Option(IdentityPopulator.populate(Some(client)))

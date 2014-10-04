@@ -92,6 +92,14 @@ object DaoClient extends BaseDao[Client] {
       'active->true,'login -> login
     ).executeUpdate()
   }
-    }    
+ }    
+    
+  def updateClient(client: Client) {
+  DB.withConnection { implicit c =>
+    SQL("update  client set  firstName={firstName}, lastName={lastName}, password={password} where login = {login}").on(
+      'firstName->client.firstName,'lastName->client.lastName,'password->client.password,'login -> client.login
+    ).executeUpdate()
+  }
+ }       
 }
 
